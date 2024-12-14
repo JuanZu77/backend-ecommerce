@@ -1,0 +1,44 @@
+name: CI/CD Backend
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Build Docker image
+        run: |
+          docker build -t backend-app .
+        
+      - name: Push Docker image to Google Container Registry
+        run: |
+          gcloud auth activate-service-account --key-file=$GCP_CREDENTIALS
+          gcloud auth configure-docker
+          docker tag backend-app gcr.io/YOUR_PROJECT_ID/backend-app
+          docker push gcr.io/YOUR_PROJECT_ID/backend-app
+
+      - name: Deploy to Google Cloud Run
+        run: |
+          gcloud run deploy backend-app \
+            --image gcr.io/YOUR_PROJECT_ID/backend-app \
+            --platform managed \
+            --region YOUR_REGION \
+            --allow-unauthenticated
