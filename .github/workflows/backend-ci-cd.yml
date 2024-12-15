@@ -36,6 +36,10 @@ jobs:
           gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
           gcloud auth configure-docker
 
+      - name: Set default project
+        run: |
+          gcloud config set project ecommerceapp-444719
+
       - name: Push Docker image to Google Container Registry
         run: |
           docker tag backend-app gcr.io/ecommerceapp-444719/backend
@@ -48,4 +52,5 @@ jobs:
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated
+
 
