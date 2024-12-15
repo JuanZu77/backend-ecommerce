@@ -20,26 +20,32 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'temurin'  
+          distribution: 'temurin'
 
       - name: Build with Maven
         run: mvn clean package
 
       - name: Build Docker image
+        run: docker build -t backend-app .
+
+      - name: Authenticate with Google Cloud
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: |
-          docker build -t backend .
-        
+          echo "${GCP_CREDENTIALS}" > $HOME/gcp-key.json
+          gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
+          gcloud auth configure-docker
+
       - name: Push Docker image to Google Container Registry
         run: |
-          gcloud auth activate-service-account --key-file=$GCP_CREDENTIALS
-          gcloud auth configure-docker
-          docker tag backend gcr.io/ecommerceapp-444719/backend
+          docker tag backend-app gcr.io/ecommerceapp-444719/backend
           docker push gcr.io/ecommerceapp-444719/backend
 
       - name: Deploy to Google Cloud Run
         run: |
-          gcloud run deploy backend \
+          gcloud run deploy backend-app \
             --image gcr.io/ecommerceapp-444719/backend \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated
+
