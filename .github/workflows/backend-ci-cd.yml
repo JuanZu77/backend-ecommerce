@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adoptium'  # Añadido para especificar la distribución de JDK
+          distribution: 'temurin'  
 
       - name: Build with Maven
         run: mvn clean package
