@@ -26,19 +26,19 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t backend-app .
+          docker build -t backend .
         
       - name: Push Docker image to Google Container Registry
         run: |
           gcloud auth activate-service-account --key-file=$GCP_CREDENTIALS
           gcloud auth configure-docker
           docker tag backend-app gcr.io/ecommerceapp-444719/backend
-          docker push gcr.io/YOUR_PROJECT_ID/backend-app
+          docker push gcr.io/ecommerceapp-444719/backend
 
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy backend-app \
-            --image gcr.io/YOUR_PROJECT_ID/backend-app \
+            --image gcr.io/ecommerceapp-444719/backend \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated
