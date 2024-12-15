@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'adoptopenjdk'  # Añadido para especificar la distribución de JDK
 
       - name: Build with Maven
         run: mvn clean package
@@ -32,12 +33,12 @@ jobs:
         run: |
           gcloud auth activate-service-account --key-file=$GCP_CREDENTIALS
           gcloud auth configure-docker
-          docker tag backend-app gcr.io/ecommerceapp-444719/backend
+          docker tag backend gcr.io/ecommerceapp-444719/backend
           docker push gcr.io/ecommerceapp-444719/backend
 
       - name: Deploy to Google Cloud Run
         run: |
-          gcloud run deploy backend-app \
+          gcloud run deploy backend \
             --image gcr.io/ecommerceapp-444719/backend \
             --platform managed \
             --region us-central1 \
