@@ -55,9 +55,10 @@ jobs:
 
       - name: Grant public access to the service
         run: |
-         gcloud run services add-iam-policy-binding frontend-app \
+          gcloud run services add-iam-policy-binding backend-app \
             --member="allUsers" \
             --role="roles/run.invoker" \
             --region us-central1 \
             --platform managed \
             --project ecommerceapp-444719
+
