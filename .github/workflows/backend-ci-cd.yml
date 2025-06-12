@@ -46,6 +46,10 @@ jobs:
           docker push gcr.io/ecommerceapp-444719/backend
 
       - name: Deploy to Google Cloud Run
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           gcloud run deploy backend-app \
             --image gcr.io/ecommerceapp-444719/backend \
