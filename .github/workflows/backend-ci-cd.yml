@@ -55,7 +55,8 @@ jobs:
             --image gcr.io/ecommerceapp-444719/backend \
             --platform managed \
             --region us-central1 \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --set-env-vars SPRING_PROFILES_ACTIVE=prod,DB_URL=${{ secrets.DB_URL }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }}
 
       - name: Grant public access to the service
         run: |
