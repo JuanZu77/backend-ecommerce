@@ -23,7 +23,7 @@ jobs:
        run: docker build -t backend-app .
      - name: Authenticate with Google Cloud
        env:
-         GCP_CREDENTIALS: ${{secrets.GCP_CREDENTIALS}}
+         GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
        run: |
          echo "${GCP_CREDENTIALS}" > $HOME/gcp-key.json
          gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
@@ -51,5 +51,3 @@ jobs:
            --region us-central1 \
            --platform managed \
            --project ecommerceapp-444719
-
-
