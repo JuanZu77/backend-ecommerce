@@ -1,69 +1,58 @@
 name: CI/CD Backend
-
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+ push:
+   branches:
+     - main
+ pull_request:
+   branches:
+     - main
 jobs:
-  build:
-    runs-on: ubuntu-latest
+ build:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+     - name: Set up JDK
+       uses: actions/setup-java@v2
+       with:
+         java-version: '17'
+         distribution: 'temurin'
+     - name: Build with Maven
+       run: mvn clean package
+     - name: Build Docker image
+       run: docker build -t backend-app .
+     - name: Authenticate with Google Cloud
+       env:
+         GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+       run: |
+         echo "${GCP_CREDENTIALS}" > $HOME/gcp-key.json
+         gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
+         gcloud auth configure-docker
+     - name: Set default project
+       run: |
+         gcloud config set project ecommerceapp-444719
+     - name: Push Docker image to Google Container Registry
+       run: |
+         docker tag backend-app gcr.io/ecommerceapp-444719/backend
+         docker push gcr.io/ecommerceapp-444719/backend
+     - name: Deploy to Google Cloud Run
+       env:
+         DB_URL: ${{ secrets.DB_URL }}
+         DB_USERNAME: ${{ secrets.DB_USERNAME }}
+         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+       run: |
+         gcloud run deploy backend-app \
+           --image gcr.io/ecommerceapp-444719/backend \
+           --platform managed \
+           --region us-central1 \
+           --allow-unauthenticated
+     - name: Grant public access to the service
+       run: |
+         gcloud run services add-iam-policy-binding backend-app \
+           --member="allUsers" \
+           --role="roles/run.invoker" \
+           --region us-central1 \
+           --platform managed \
+           --project ecommerceapp-444719
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Build with Maven
-        run: mvn clean package
-
-      - name: Build Docker image
-        run: docker build -t backend-app .
-
-      - name: Authenticate with Google Cloud
-        env:
-          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: |
-          echo "${GCP_CREDENTIALS}" > $HOME/gcp-key.json
-          gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
-          gcloud auth configure-docker
-
-      - name: Set default project
-        run: |
-          gcloud config set project ecommerceapp-444719
-
-      - name: Push Docker image to Google Container Registry
-        run: |
-          docker tag backend-app gcr.io/ecommerceapp-444719/backend
-          docker push gcr.io/ecommerceapp-444719/backend
-
-      - name: Deploy to Google Cloud Run
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: |
-          gcloud run deploy backend-app \
-            --image gcr.io/ecommerceapp-444719/backend \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated \
-            --set-env-vars SPRING_PROFILES_ACTIVE=prod,DB_URL=$DB_URL,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD
-
-      - name: Grant public access to the service
-        run: |
-          gcloud run services add-iam-policy-binding backend-app \
-            --member="allUsers" \
-            --role="roles/run.invoker" \
-            --region us-central1 \
-            --platform managed \
-            --project ecommerceapp-444719
 
