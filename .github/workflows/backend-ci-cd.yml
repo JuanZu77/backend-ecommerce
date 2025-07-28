@@ -46,13 +46,17 @@ jobs:
           docker push gcr.io/ecommerceapp-444719/backend
 
       - name: Deploy to Google Cloud Run
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           gcloud run deploy backend-app \
             --image gcr.io/ecommerceapp-444719/backend \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated \
-            --set-env-vars SPRING_PROFILES_ACTIVE=prod,DB_URL=${{ secrets.DB_URL }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            --set-env-vars SPRING_PROFILES_ACTIVE=prod,DB_URL=$DB_URL,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD
 
       - name: Grant public access to the service
         run: |
