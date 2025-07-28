@@ -23,7 +23,7 @@ jobs:
        run: docker build -t backend-app .
      - name: Authenticate with Google Cloud
        env:
-         GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+         GCP_CREDENTIALS: ${{secrets.GCP_CREDENTIALS}}
        run: |
          echo "${GCP_CREDENTIALS}" > $HOME/gcp-key.json
          gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
@@ -36,16 +36,13 @@ jobs:
          docker tag backend-app gcr.io/ecommerceapp-444719/backend
          docker push gcr.io/ecommerceapp-444719/backend
      - name: Deploy to Google Cloud Run
-       env:
-         DB_URL: ${{ secrets.DB_URL }}
-         DB_USERNAME: ${{ secrets.DB_USERNAME }}
-         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
        run: |
          gcloud run deploy backend-app \
            --image gcr.io/ecommerceapp-444719/backend \
            --platform managed \
            --region us-central1 \
-           --allow-unauthenticated
+           --allow-unauthenticated \
+           --set-env-vars SPRING_PROFILES_ACTIVE=prod,DB_URL=${{ secrets.DB_URL }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }}
      - name: Grant public access to the service
        run: |
          gcloud run services add-iam-policy-binding backend-app \
