@@ -6,6 +6,8 @@ import com.juanzubiri.ecommerce.backend.domain.port.IUserRepository;
 import com.juanzubiri.ecommerce.backend.infrastructure.UserEntity;
 import com.juanzubiri.ecommerce.backend.infrastructure.mapper.UserMapper;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public class UserCrudRepositoryImpl implements IUserRepository {
 
@@ -19,6 +21,7 @@ public class UserCrudRepositoryImpl implements IUserRepository {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         UserEntity entity = userMapper.toUserEntity(user); 
         UserEntity savedEntity = iUserCrudRepository.save(entity); 

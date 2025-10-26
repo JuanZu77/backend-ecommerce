@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.6</version>
+		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.juanzubiri.ecommerce</groupId>
@@ -44,6 +44,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
 		<!-- PostgreSQL -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -74,7 +75,12 @@
         <artifactId>mapstruct</artifactId>
         <version>1.5.5.Final</version>
     </dependency>
-    
+
+    <dependency>
+    	<groupId>com.juan-zubiri.monitoreo</groupId>
+    	<artifactId>Challenge-Monitoreo</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    </dependency>
 	</dependencies>
 
 	<build>
