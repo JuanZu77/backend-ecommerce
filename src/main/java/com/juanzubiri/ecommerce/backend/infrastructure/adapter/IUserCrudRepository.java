@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.juanzubiri.ecommerce.backend.infrastructure.UserEntity;
+import com.juanzubiri.ecommerce.backend.infrastructure.entity.UserEntity;
                                                         
 public interface IUserCrudRepository extends CrudRepository<UserEntity, Integer>{
 

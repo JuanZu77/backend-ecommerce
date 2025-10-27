@@ -1,4 +1,4 @@
-package com.juanzubiri.ecommerce.backend.infrastructure;
+package com.juanzubiri.ecommerce.backend.infrastructure.entity;
 
 import java.time.LocalDateTime;
 
