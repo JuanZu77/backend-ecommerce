@@ -1,5 +1,7 @@
 package com.juanzubiri.ecommerce.backend.infrastructure.rest;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,15 +24,15 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public User save(@RequestBody User user) {
+	public ResponseEntity<User> save(@RequestBody User user) {
 		
-		return userService.save(user);
+		return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{id}")
-	public User findById(@PathVariable Integer id) {
+	public ResponseEntity<User> findById(@PathVariable Integer id) {
 		
-		return userService.findById(id);
+		return ResponseEntity.ok(userService.findById(id));
 	}
 	
 

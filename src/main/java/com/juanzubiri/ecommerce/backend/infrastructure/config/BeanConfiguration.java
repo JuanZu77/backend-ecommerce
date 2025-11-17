@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.juanzubiri.ecommerce.backend.application.CategoryService;
+import com.juanzubiri.ecommerce.backend.application.ProductService;
 import com.juanzubiri.ecommerce.backend.application.UserService;
 import com.juanzubiri.ecommerce.backend.domain.port.ICategoryRepository;
+import com.juanzubiri.ecommerce.backend.domain.port.IProductRepository;
 import com.juanzubiri.ecommerce.backend.domain.port.IUserRepository;
 
 @Configuration //Definida como clase de configuracion
@@ -24,6 +26,12 @@ public class BeanConfiguration {
 	CategoryService categoryService(ICategoryRepository iCategoryRepository) {
 		
 		return new CategoryService(iCategoryRepository);
+	}
+	
+	@Bean
+	ProductService productService(IProductRepository iProductRepository) {
+		
+		return new ProductService(iProductRepository);
 	}
 
 }

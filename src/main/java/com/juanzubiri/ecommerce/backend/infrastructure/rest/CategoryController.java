@@ -1,5 +1,7 @@
 package com.juanzubiri.ecommerce.backend.infrastructure.rest;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/admin/categories")
-@Slf4j
+@Slf4j //log.info()
 public class CategoryController {
 
 	private final CategoryService categoryService;
@@ -25,24 +27,28 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 	
+
 	@PostMapping
-	public Category save(@RequestBody Category category) {
-		
-		return categoryService.save(category);
+	public ResponseEntity<Category> save(@RequestBody Category category) {
+		log.info("Nombre de la Categoria: {}", category.getName());
+		return new ResponseEntity<>(categoryService.save(category), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	public Iterable<Category> findAll(){
-		return categoryService.finAll();
+	public ResponseEntity<Iterable<Category>> findAll(){
+		
+		return ResponseEntity.ok(categoryService.finAll());
 	}
 	
 	@GetMapping("/{id}")
-	public Category findById(@PathVariable Integer id) {
-		return categoryService.findById(id);
+	public ResponseEntity<Category> findById(@PathVariable Integer id) {
+		
+		return ResponseEntity.ok(categoryService.findById(id));
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteById(@PathVariable Integer id) {
+	public ResponseEntity<HttpStatus> deleteById(@PathVariable Integer id) {
 		categoryService.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 }
