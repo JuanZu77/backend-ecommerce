@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UploadFile {
 	
-	private final String FOLDER = "src//main//reosurce//static//images";
+	private final String FOLDER = "src/main/resources/static/images/";
 	private final String IMG_DEFAULT = "default.jpg";  
 	
 	private final String URL = "http://localhost:8080/images/";
@@ -29,8 +29,11 @@ public class UploadFile {
 	}
 	
 	public void delete(String nameFile) {
-		File file = new File(FOLDER);
-		file.delete();
+	    File file = new File(FOLDER + nameFile);
+	    if (file.exists()) {
+	        file.delete();
+	    }
 	}
+
 
 }
