@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.springframework.stereotype.Service;
+
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Payer;
 import com.paypal.api.payments.Payment;
@@ -13,6 +15,7 @@ import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 
+@Service
 public class PaypalService {
 	
 	private final APIContext apiContext;
@@ -33,7 +36,8 @@ public class PaypalService {
 		
 		Amount amount = new Amount();
 		amount.setCurrency(currency);
-		amount.setTotal(String.format(Locale.forLanguageTag(currency), "%.2f", total));
+	    amount.setTotal(String.format(Locale.forLanguageTag(currency), "%.2f", total));
+		//amount.setTotal(String.format(Locale.US, "%.2f", total)); // recomendado 
 		
 		Transaction transaction = new Transaction();
 		transaction.setDescription(description);
