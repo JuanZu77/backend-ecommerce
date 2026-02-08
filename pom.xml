@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.8</version>
+		<version>3.5.10</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.juanzubiri.ecommerce</groupId>
@@ -76,11 +76,14 @@
         <version>1.5.5.Final</version>
     </dependency>
 
-    <dependency>
-    	<groupId>com.juan-zubiri.monitoreo</groupId>
-    	<artifactId>Challenge-Monitoreo</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
-    </dependency>
+	<!-- Source: https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk -->
+	<dependency>
+	    <groupId>com.paypal.sdk</groupId>
+	    <artifactId>rest-api-sdk</artifactId>
+	    <version>1.14.0</version>
+	    <scope>compile</scope>
+	</dependency>
+
 	</dependencies>
 
 	<build>
