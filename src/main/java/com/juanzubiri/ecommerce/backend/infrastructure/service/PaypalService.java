@@ -64,23 +64,16 @@ public class PaypalService {
 	 parámetro el id del pago y el id de la cuenta de quien realiza el pago.
 	 */
 	public  Payment executePayment(
-
             String paymentId,
-
             String payerId
 
     ) throws PayPalRESTException {
 
         Payment payment = new Payment();
-
         payment.setId(paymentId);
 
-
-
         PaymentExecution paymentExecution = new PaymentExecution();
-
         paymentExecution.setPayerId(payerId);
-
         return  payment.execute(apiContext,paymentExecution);
 
     }   
