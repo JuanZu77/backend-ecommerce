@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.juanzubiri.ecommerce.backend.domain.model.DataPayment;
+import com.juanzubiri.ecommerce.backend.domain.model.URLPaypalResponse;
 import com.juanzubiri.ecommerce.backend.infrastructure.service.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
@@ -28,7 +29,7 @@ public class PaypalController {
 	private final String CANCEL_URL = "http:localhost:8080/api/v1/payments/cancel";
 	
 	@PostMapping
-	public String createPayment(@RequestBody DataPayment dataPayment) {
+	public URLPaypalResponse createPayment(@RequestBody DataPayment dataPayment) {
 		try {
 			Payment payment = paypalService.createPayment(
 					Double.valueOf(dataPayment.getAmount()),
@@ -42,14 +43,15 @@ public class PaypalController {
 			
 			for(Links links : payment.getLinks()) {
 				if(links.getRel().equals("approval_url")) {
-					return links.getHref();
+					return new URLPaypalResponse(links.getHref());
 				}
 			}
 		} catch (NumberFormatException | PayPalRESTException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "";
+		
+		return new URLPaypalResponse("");
 	}
 	
 	
