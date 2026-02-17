@@ -25,8 +25,8 @@ import lombok.AllArgsConstructor;
 public class PaypalController {
 	
 	private final PaypalService paypalService;
-	private final String SUCCESS_URL = "http:localhost:8080/api/v1/payments/success";
-	private final String CANCEL_URL = "http:localhost:8080/api/v1/payments/cancel";
+	private final String SUCCESS_URL = "http://localhost:8080/api/v1/payments/success";
+	private final String CANCEL_URL = "http://localhost:8080/api/v1/payments/cancel";
 	
 	@PostMapping
 	public URLPaypalResponse createPayment(@RequestBody DataPayment dataPayment) {
@@ -51,7 +51,7 @@ public class PaypalController {
 			e.printStackTrace();
 		}
 		
-		return new URLPaypalResponse("");
+		return new URLPaypalResponse("http://localhost:4200");
 	}
 	
 	
@@ -61,21 +61,22 @@ public class PaypalController {
 		try {
 			Payment payment = paypalService.executePayment(paymentId, payerId);
 			if(payment.getState().equals("approved")) {
-				return new RedirectView("http:localhost:4200/payment/success");
+				//return new RedirectView("http:localhost:4200/payment/success");
+				return new RedirectView("http://localhost:4200");
 			}
 			
 		} catch (PayPalRESTException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return new RedirectView("http://localhost:4200");
 	}
 	
 	
 	@GetMapping("/cancel")
 	public RedirectView paymentCancel() {
 		
-		return new RedirectView("http:localhost:4200");
+		return new RedirectView("http://localhost:4200");
 	}
 	
 	
