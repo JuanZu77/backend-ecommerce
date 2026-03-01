@@ -58,6 +58,7 @@ public class PaypalService {
 		RedirectUrls redirectUrls = new RedirectUrls();
 		redirectUrls.setReturnUrl(successUrl);
 		redirectUrls.setCancelUrl(cancelUrl);
+		payment.setRedirectUrls(redirectUrls);
 		
 		return payment.create(apiContext); // aqui requiere la Exception => throws PayPalRESTException
 	}
