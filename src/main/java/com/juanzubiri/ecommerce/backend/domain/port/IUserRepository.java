@@ -13,6 +13,8 @@ public interface IUserRepository {
 	//Buscar por id
 	User findById(Integer id);
 	
+	boolean existsByEmail(String email);
+	
 	//Eliminar por id
 	//void deleteById(User id);
 }

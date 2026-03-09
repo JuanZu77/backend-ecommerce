@@ -1,3 +1,4 @@
+
 package com.juanzubiri.ecommerce.backend.infrastructure.adapter;
 
 import java.util.Optional;
@@ -9,4 +10,6 @@ import com.juanzubiri.ecommerce.backend.infrastructure.entity.UserEntity;
 public interface IUserCrudRepository extends CrudRepository<UserEntity, Integer>{
 
 	 Optional<UserEntity> findByEmail(String email);
+	 
+	 boolean existsByEmail(String email);
 }

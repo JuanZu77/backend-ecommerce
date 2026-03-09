@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins="http://localhost:4200")
-@RequestMapping("api/v1/payments")
+@RequestMapping("/api/v1/payments")
 public class PaypalController {
 	
 	private final PaypalService paypalService;

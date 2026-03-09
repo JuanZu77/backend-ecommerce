@@ -30,14 +30,14 @@ public class UserCrudRepositoryImpl implements IUserRepository {
         return userMapper.toUser(savedEntity); // Entity → Domain
     }
 
-	@Override
-	@Transactional(readOnly = true)
-	public User findByEmail(String email) {
-		
-		return iUserCrudRepository.findByEmail(email)
-	            .map(userMapper::toUser) 
-	            .orElse(null); 
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public User findByEmail(String email) {
+
+        return iUserCrudRepository.findByEmail(email)
+                .map(userMapper::toUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
 	@Override
 	@Transactional(readOnly = true)
@@ -47,6 +47,12 @@ public class UserCrudRepositoryImpl implements IUserRepository {
 	            .map(userMapper::toUser) 
 	            .orElse(null); 
 	    
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public boolean existsByEmail(String email) {
+	    return iUserCrudRepository.existsByEmail(email);
 	}
 	
 

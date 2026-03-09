@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.juanzubiri.ecommerce.backend.application.CategoryService;
 import com.juanzubiri.ecommerce.backend.application.OrderService;
 import com.juanzubiri.ecommerce.backend.application.ProductService;
+import com.juanzubiri.ecommerce.backend.application.RegistrationService;
 import com.juanzubiri.ecommerce.backend.application.UploadFile;
 import com.juanzubiri.ecommerce.backend.application.UserService;
 import com.juanzubiri.ecommerce.backend.domain.port.ICategoryRepository;
@@ -41,6 +42,12 @@ public class BeanConfiguration {
 	OrderService orderService(IOrderRepository iOrderReposiotory) {
 		
 		return new OrderService(iOrderReposiotory);
+	}
+	
+	@Bean
+	RegistrationService registrationService(IUserRepository iUserRepository) {
+		
+		return new RegistrationService(iUserRepository);
 	}
 
 }
