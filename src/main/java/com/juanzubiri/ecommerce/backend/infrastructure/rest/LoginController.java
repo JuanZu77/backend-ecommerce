@@ -12,21 +12,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.juanzubiri.ecommerce.backend.infrastructure.dto.JwtClient;
 import com.juanzubiri.ecommerce.backend.infrastructure.dto.UserDTO;
+import com.juanzubiri.ecommerce.backend.infrastructure.service.JwtService;
 
 @RestController
 @RequestMapping("/api/v1/security")
 public class LoginController {
 	
 	private AuthenticationManager authenticationManager;
+	private final JwtService jwtService;
 
-	public LoginController(AuthenticationManager authenticationManager) {
+
+	public LoginController(AuthenticationManager authenticationManager, JwtService jwtService) {
 		super();
 		this.authenticationManager = authenticationManager;
+		this.jwtService = jwtService;
 	}
 
+
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UserDTO userDTO){
+	public ResponseEntity<JwtClient> login(@RequestBody UserDTO userDTO){
 		
 		Authentication authentication = authenticationManager.authenticate(
 				
@@ -34,6 +40,11 @@ public class LoginController {
 				);
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return new ResponseEntity<String>("Usuario Logueado satisfactoriamente",HttpStatus.OK);
+		
+		String token = jwtService.generateToken(userDTO.username());
+		
+		JwtClient jwtClient = new JwtClient(token);
+		
+		return new ResponseEntity<>(jwtClient,HttpStatus.OK);
 	}
 }

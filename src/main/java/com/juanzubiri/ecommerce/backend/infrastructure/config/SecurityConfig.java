@@ -8,11 +8,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.juanzubiri.ecommerce.backend.infrastructure.jwt.JwtAuthorizationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 	
+	private final JwtAuthorizationFilter authorizationFilter;
+	
+	public SecurityConfig(JwtAuthorizationFilter authorizationFilter) {
+		super();
+		this.authorizationFilter = authorizationFilter;
+	}
+
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		
@@ -30,7 +40,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/v1/payments/**").hasRole("USER")
 				.requestMatchers("/api/v1/home/**").permitAll()
 				.requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-				);
+	).addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		return httpSecurity.build();
 		
