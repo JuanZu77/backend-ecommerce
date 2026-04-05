@@ -31,29 +31,29 @@ public class ProductController {
 	
 	private final ProductService productService;
 	
-	@PostMapping
+	@PostMapping(consumes = "multipart/form-data")
 	public ResponseEntity<Product> save(
-		                             	@RequestParam("code") String code,
-		 	                            @RequestParam("name") String name,
-			                            @RequestParam("description") String description,
-			                            @RequestParam("price") BigDecimal price,
-			                            @RequestParam("urlImage") String urlImage,
-			                            @RequestParam("userId") Integer userId,
-			                            @RequestParam("categoryId") Integer categoryId,
-			                            @RequestParam(value = "image", required = false) MultipartFile multipartFile
-			                            ) throws IOException{
-		
-		Product product = new Product();
-		product.setCode(code);
-		product.setName(name);
-		product.setDescription(description);
-		product.setPrice(price);
-		product.setUrlImage(urlImage);
-		product.setUserId(userId);
-		product.setCategoryId(categoryId);
-		
-		log.info("Nombre Producto: {}", product.getName());
-		return new ResponseEntity<>(productService.save(product, multipartFile), HttpStatus.CREATED);
+	        @RequestParam("code") String code,
+	        @RequestParam("name") String name,
+	        @RequestParam("description") String description,
+	        @RequestParam("price") BigDecimal price,
+	        @RequestParam(value = "urlImage", required = false) String urlImage,
+	        @RequestParam("userId") Integer userId,
+	        @RequestParam("categoryId") Integer categoryId,
+	        @RequestParam(value = "image", required = false) MultipartFile multipartFile
+	) throws IOException {
+
+	    Product product = new Product();
+	    product.setCode(code);
+	    product.setName(name);
+	    product.setDescription(description);
+	    product.setPrice(price);
+	    product.setUrlImage(urlImage);
+	    product.setUserId(userId);
+	    product.setCategoryId(categoryId);
+
+	    log.info("Nombre Producto: {}", product.getName());
+	    return new ResponseEntity<>(productService.save(product, multipartFile), HttpStatus.CREATED);
 	}
 	
 	@PutMapping(value = "/{id}", consumes = "multipart/form-data")
